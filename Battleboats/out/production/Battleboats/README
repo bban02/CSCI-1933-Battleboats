@@ -1,0 +1,11 @@
+Written by: Brady Bannick, banni041
+
+The best way to compile and run my code would be to use an IDE such as intellij,
+but you can also just download all 4 of my classes and compile all of them by
+typing on your keyboard, "javac Classname.java" and the only class that you
+would need to run is the game class which you can do by typing on your keyboard,
+"java Game".
+
+Assumptions:
+You must have something that can run a java program
+User must enter numbers in spots specified
