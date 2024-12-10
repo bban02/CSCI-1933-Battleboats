@@ -25,6 +25,7 @@ public class Game {
         }
         System.out.println(board.display());
         System.out.println("(0,0) is the upper left coordinate and (m - 1, n - 1) is the bottom right coordinate of the display.");
+        System.out.println("Number of ships equals " + board.getShips());
         while(myScanner.hasNextLine()) {
             System.out.println("Choose 1 of 4 attack methods: fire (basic attack), missile (area attack), drone (row or column Scanner) or scanner (boat Scanner).");
             words = myScanner.next();
@@ -65,14 +66,16 @@ public class Game {
                     break;
                 }
                 s -= 1;
-                System.out.println("You hit " + s + " spots that contain a boat!");
+                if (s != -1) {
+                    System.out.println("You hit " + s + " spots that contain a boat!");
+                }
                 if (debug.equals("yes")){
                     System.out.println(board);
                 }
                 System.out.println(board.display());
             }
             else if(words.equals("drone") || words.equals("Drone")){
-                System.out.println("Would you like to scan a row or a column? Type 0 for column, and 1 for row:");
+                System.out.println("Would you like to scan a row or a column? Type 0 for row, and 1 for column:");
                 x = myScanner.nextInt();
                 System.out.println("Which row or column would you like to scan?");
                 y = myScanner.nextInt();
@@ -80,10 +83,15 @@ public class Game {
                 if (s == 0){
                     System.out.println("coordinates out of bounds, lose a turn");
                 }
+                if (s == -1) {
+                    System.out.println("You are out of drones, please try a different attack");
+                }
                 if(!board.gameStatus){
                     break;
                 }
-                System.out.println("Drone scanned " + s + " targets in specified area.");
+                if (s > 0) {
+                    System.out.println("Drone scanned " + s + " targets in specified area.");
+                }
                 if (debug.equals("yes")){
                     System.out.println(board);
                 }
