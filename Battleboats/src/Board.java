@@ -9,6 +9,7 @@ public class Board {
     public int boatsSunk = 0;
     public boolean gameStatus = true;
     public int drones = 1;
+    public int attack = 0;
 
     public Board(int rows, int columns){// creating the board
         cell = new Cell[rows][columns];
@@ -17,6 +18,9 @@ public class Board {
                 cell[i][j] = new Cell(i,j,'_');
             }
         }
+    }
+    public char getCellStatus(int row, int col) {
+        return cell[col][row].getStatus();
     }
     public void placeBoats(){
         boats = new Boat[5];//creating the boat array
@@ -58,6 +62,7 @@ public class Board {
             boolean valid = false;
             int x = 0;
             int y = 0;
+            //while loop to randomly generate a position and direction for each vote
             while (!valid){
                 x = (int) Math.floor(Math.random()*10);
                 y = (int) Math.floor(Math.random()*10);
@@ -77,6 +82,7 @@ public class Board {
                     valid = true;
                 }
             }
+            // Checks to make sure there is no boat present and then places the neew boat
             for (int j = 0; j < boats[i].getBoat().length; j++) {
                 if (boats[i].getOrientation()) {
                     boats[i].getBoat()[j] = new Cell(x+j, y, 'B');
@@ -92,7 +98,7 @@ public class Board {
     public int getShips() {
         return ships;
     }
-    public String display(){// display displays an empty board that will update when the user fires
+    public String display(){// display, displays an empty board that will update when the user fires
         String string = "";
         for(int i = 0; i < cell.length; i++){
             for(int j = 0; j < cell[0].length; j++){
@@ -109,7 +115,7 @@ public class Board {
         }
         return string;
     }
-    public String toString(){// toString displays the cheat board that shows where all of the boats are
+    public String toString(){// toString, displays the cheat board that shows where all of the boats are
         String string = "";
             for(int i = 0; i < cell.length; i++){
                 for(int j = 0; j < cell[0].length; j++){
@@ -130,10 +136,11 @@ public class Board {
         int fire = 0;
         int hits = 0;
         shots++;
-        turns++;
+        if (attack == 0) {
+            turns++;
+        }
 
         if (x < 0 || x > cell.length - 1 || y < 0 || y > cell[0].length - 1){
-            turns++;
             return 0;
         }
         if (cell[x][y].getStatus() == 'B') {
@@ -146,11 +153,9 @@ public class Board {
         }
         else if (cell[x][y].getStatus() == 'H') {
             fire = 3;
-            turns++;
         }
         else if (cell[x][y].getStatus() == 'M') {
             fire = 4;
-            turns++;
         }
 
         if (cell[x][y].getStatus() == 'B' || cell[x][y].getStatus() == 'H'){// this nested loop checks the boat array to see if the boat the we just attacked has sunk
@@ -161,9 +166,10 @@ public class Board {
                             if (cell[boats[i].getBoat()[k].getRow()][boats[i].getBoat()[k].getColumn()].getStatus() == 'H'){
                                 hits++;
                             }
-                            if (hits == boats[i].getSize()){
+                            if (hits == boats[i].getSize() && boats[i].getStatus() == true){
                                 System.out.println("Boat sunk!");
                                 boatsSunk++;
+                                boats[i].setStatus(false);
                                 if(boatsSunk == ships){
                                     System.out.println("Game Over \nShots taken: " + shots + "\nTurns: " + turns);
                                     gameStatus = false;
@@ -179,10 +185,9 @@ public class Board {
     public int missile(int x, int y){// missile attacks a 3x3 area
         int hits = 1;
         int hit = 0;
-        shots++;
         turns++;
+        attack = 1;
         if (x < 0 || x > cell.length - 1 || y < 0 || y > cell[0].length - 1){
-            turns++;
             return 0;
         }
         for(int i = -1; i < 2; i++){
@@ -193,6 +198,7 @@ public class Board {
                 }
             }
         }
+        attack = 0;
         return hits;
     }
     public int drone(int direction, int index){// drone scans a row or a column for any boats and returns the number of spots that contain a boat
@@ -202,7 +208,6 @@ public class Board {
             return -1;
         }
         if (index < 0 || index > cell.length){
-            turns++;
             return 0;
         }
         if (direction == 1){
@@ -224,10 +229,9 @@ public class Board {
     }
     public int scanner(int x, int y){// scanner will scan a coordinate and return if there is a boat there, if there is it will return the size and the direction of the boat
         int size;
-        shots++;
         turns++;
+        attack = 1;
         if (x < 0 || x > cell.length - 1|| y < 0 || y > cell[0].length - 1){
-            turns++;
             return 0;
         }
         else {
@@ -244,6 +248,7 @@ public class Board {
                 }
             }
         }
+        attack = 0;
         return size;
     }
 }
