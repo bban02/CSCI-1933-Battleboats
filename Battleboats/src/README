@@ -1,10 +1,11 @@
 Written by: Brady Bannick, banni041
 
-The best way to compile and run my code would be to use an IDE such as intellij,
+The best way to compile and run my code would be to use an IDE such as vsCode,
 but you can also just download all 4 of my classes and compile all of them by
 typing on your keyboard, "javac Classname.java" and the only class that you
 would need to run is the game class which you can do by typing on your keyboard,
-"java Game".
+"java BattleboatsGUI". Game class is a non GUI version of the gameboard. Final version
+of the project would use BattleboatsGUI instead of Game.
 
 Assumptions:
 You must have something that can run a java program
